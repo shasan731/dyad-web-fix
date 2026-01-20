@@ -12,7 +12,7 @@ Your Dyad app is getting **404 errors on `/api/ipc/invoke`** when deployed to Ve
 
 I've created:
 - **`api/ipc/invoke.ts`** - A Vercel serverless function that handles POST `/api/ipc/invoke` requests
-- **Updated `vercel.json`** - Added Node.js runtime configuration for API routes
+- **Updated `vercel.json`** - Set Vercel v2 config for the web build output
 
 This handles the initial 404 error for the invoke endpoint.
 
@@ -126,8 +126,8 @@ If you want to keep using Vercel:
    - Currently uses SQLite (needs migration for production)
 
 2. **`vercel.json`** (UPDATED)
-   - Added Node.js runtime configuration
-   - Tells Vercel to run TS files in api/ directory
+   - Uses Vercel v2 config
+   - Points static output to `dist/web`
 
 ## Testing Locally
 

@@ -21,7 +21,7 @@ This document explains the changes made to remove Electron and create a fully we
 ### 4. **Created Vercel API Handlers**
 - `api/ipc/invoke.ts` - Handles POST requests to `/api/ipc/invoke` for IPC calls
 - `api/ipc/events.ts` - Handles Server-Sent Events (SSE) for event streaming
-- Updated `vercel.json` with proper Node.js runtime configuration
+- Updated `vercel.json` for Vercel v2 configuration
 
 ## Architecture
 
@@ -140,19 +140,15 @@ NODE_ENV=production
 The `vercel.json` configuration:
 ```json
 {
+  "version": 2,
   "buildCommand": "npm run web:build",
-  "outputDirectory": "dist/web",
-  "functions": {
-    "api/**/*.ts": {
-      "runtime": "nodejs20.x"
-    }
-  }
+  "outputDirectory": "dist/web"
 }
 ```
 
 - `buildCommand`: Vite builds the React app
 - `outputDirectory`: Static files served by Vercel
-- `functions`: TypeScript API handlers run as serverless functions
+- `api/`: TypeScript API handlers run as serverless functions by default
 
 ## Troubleshooting
 
