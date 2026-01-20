@@ -38,11 +38,17 @@ module.exports = async (req, res) => {
 
   try {
     // Dynamically require the modules (so electron stub is loaded first)
-    const { registerIpcHandlers } = await import('../../../src/ipc/ipc_host.js');
-    const { initializeDatabase } = await import('../../../src/db/index.js');
-    const { VALID_INVOKE_CHANNELS } = await import('../../../src/ipc/ipc_channels.js');
-    const { cleanupOldAiMessagesJson } = await import('../../../src/pro/main/ipc/handlers/local_agent/ai_messages_cleanup.js');
-    const { ipcMain } = await import('electron');
+    // Use require() instead of import() for better path resolution in serverless
+    const path = require('path');
+    
+    // Construct absolute paths relative to the project root
+    const srcDir = path.join(__dirname, '../../src');
+    
+    const { registerIpcHandlers } = require(path.join(srcDir, 'ipc/ipc_host.js'));
+    const { initializeDatabase } = require(path.join(srcDir, 'db/index.js'));
+    const { VALID_INVOKE_CHANNELS } = require(path.join(srcDir, 'ipc/ipc_channels.js'));
+    const { cleanupOldAiMessagesJson } = require(path.join(srcDir, 'pro/main/ipc/handlers/local_agent/ai_messages_cleanup.js'));
+    const { ipcMain } = require('electron');
 
     // Initialize database and handlers (only once)
     if (!process.env.DYAD_INITIALIZED) {
