@@ -1,5 +1,5 @@
-import { BrowserWindow, clipboard, ipcMain } from "electron";
-import type { IpcMainInvokeEvent } from "electron";
+import { BrowserWindow, clipboard, ipcMain } from "@/platform/electron";
+import type { IpcMainInvokeEvent } from "@/platform/electron";
 import { platform, arch } from "os";
 import { SystemDebugInfo, ChatLogsData } from "../ipc_types";
 import { readSettings } from "../../main/settings";
@@ -224,4 +224,5 @@ export function registerDebugHandlers() {
 function serializeModelForDebug(model: LargeLanguageModel): string {
   return `${model.provider}:${model.name} | customId: ${model.customModelId}`;
 }
+
 

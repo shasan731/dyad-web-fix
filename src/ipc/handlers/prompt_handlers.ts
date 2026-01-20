@@ -1,4 +1,4 @@
-import { IpcMainInvokeEvent } from "electron";
+import { IpcMainInvokeEvent } from "@/platform/electron";
 import log from "@/utils/simple_logger";
 import { createLoggedHandler } from "./safe_handle";
 import { db } from "@/db";
@@ -89,4 +89,5 @@ export function registerPromptHandlers() {
     },
   );
 }
+
 

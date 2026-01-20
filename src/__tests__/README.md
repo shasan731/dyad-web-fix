@@ -57,7 +57,7 @@ vi.mock("isomorphic-git", () => ({
 When testing IPC handlers, mock the Electron IPC system:
 
 ```typescript
-vi.mock("electron", () => ({
+vi.mock("@/platform/electron", () => ({
   ipcMain: {
     handle: vi.fn(),
     on: vi.fn(),

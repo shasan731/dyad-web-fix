@@ -1,6 +1,6 @@
 import { safeSend } from "../utils/safe_sender";
 import { cleanFullResponse } from "../utils/cleanFullResponse";
-import type { IpcMainInvokeEvent } from "electron";
+import type { IpcMainInvokeEvent } from "@/platform/electron";
 
 // e.g. [dyad-qa=add-dep]
 // Canned responses for test prompts
@@ -107,3 +107,4 @@ export async function streamTestResponse(
 
   return fullResponse;
 }
+

@@ -3,7 +3,7 @@
  * Each tool includes a zod schema, description, and execute function
  */
 
-import { IpcMainInvokeEvent } from "electron";
+import { IpcMainInvokeEvent } from "@/platform/electron";
 import crypto from "node:crypto";
 import { readSettings, writeSettings } from "@/main/settings";
 import { writeFileTool } from "./tools/write_file";
@@ -305,3 +305,4 @@ export function buildAgentToolSet(ctx: AgentContext) {
 
   return toolSet;
 }
+

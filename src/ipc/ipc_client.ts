@@ -1,4 +1,3 @@
-import type { IpcRenderer } from "electron";
 import {
   type ChatSummary,
   ChatSummariesSchema,
@@ -176,7 +175,7 @@ export class IpcClient {
   private globalChatStreamEndHandlers: Set<(chatId: number) => void>;
   private constructor() {
     const electronIpc = (window as any)?.electron?.ipcRenderer as
-      | IpcRenderer
+      | IpcRendererLike
       | undefined;
     this.isElectron = Boolean(electronIpc);
     this.ipcRenderer =
@@ -1803,3 +1802,4 @@ export class IpcClient {
     await this.ipcRenderer.invoke("clear-logs", { appId });
   }
 }
+

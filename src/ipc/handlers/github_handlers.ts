@@ -1,4 +1,4 @@
-import { ipcMain, BrowserWindow, IpcMainInvokeEvent } from "electron";
+import { ipcMain, BrowserWindow, IpcMainInvokeEvent } from "@/platform/electron";
 import fetch from "node-fetch"; // Use node-fetch for making HTTP requests in main process
 import { writeSettings, readSettings } from "../../main/settings";
 import {
@@ -1312,4 +1312,5 @@ export async function updateAppGithubRepo({
     })
     .where(eq(schema.apps.id, appId));
 }
+
 

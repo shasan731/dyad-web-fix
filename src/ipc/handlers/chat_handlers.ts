@@ -1,5 +1,5 @@
-import { ipcMain } from "electron";
-import type { IpcMainInvokeEvent } from "electron";
+import { ipcMain } from "@/platform/electron";
+import type { IpcMainInvokeEvent } from "@/platform/electron";
 import { db } from "../../db";
 import { apps, chats, messages } from "../../db/schema";
 import { desc, eq, and, like } from "drizzle-orm";
@@ -175,4 +175,5 @@ export function registerChatHandlers() {
     },
   );
 }
+
 

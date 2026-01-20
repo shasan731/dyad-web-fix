@@ -1,5 +1,5 @@
-import { ipcMain } from "electron";
-import type { IpcMainInvokeEvent } from "electron";
+import { ipcMain } from "@/platform/electron";
+import type { IpcMainInvokeEvent } from "@/platform/electron";
 import { db } from "../../db";
 import { chats, messages } from "../../db/schema";
 import { eq, and, like, desc } from "drizzle-orm";
@@ -73,3 +73,4 @@ function parseSecurityFindings(content: string): SecurityFinding[] {
 
   return findings;
 }
+

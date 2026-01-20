@@ -1,5 +1,5 @@
-import { ipcMain, session } from "electron";
-import type { IpcMainInvokeEvent } from "electron";
+import { ipcMain, session } from "@/platform/electron";
+import type { IpcMainInvokeEvent } from "@/platform/electron";
 import fs from "node:fs/promises";
 import { getTypeScriptCachePath } from "@/paths/paths";
 
@@ -23,3 +23,4 @@ export const registerSessionHandlers = () => {
     },
   );
 };
+

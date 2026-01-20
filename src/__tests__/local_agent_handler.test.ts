@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import type { IpcMainInvokeEvent, WebContents } from "electron";
+import type { IpcMainInvokeEvent, WebContents } from "@/platform/electron";
 
 // ============================================================================
 // Test Fakes & Builders
@@ -651,3 +651,4 @@ describe("handleLocalAgentStream", () => {
     });
   });
 });
+

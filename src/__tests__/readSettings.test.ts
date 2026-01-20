@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
-import { safeStorage } from "electron";
+import { safeStorage } from "@/platform/electron";
 import { readSettings, getSettingsFilePath } from "@/main/settings";
 import { getUserDataPath } from "@/paths/paths";
 import { UserSettings } from "@/lib/schemas";
@@ -9,7 +9,7 @@ import { UserSettings } from "@/lib/schemas";
 // Mock dependencies
 vi.mock("node:fs");
 vi.mock("node:path");
-vi.mock("electron", () => ({
+vi.mock("@/platform/electron", () => ({
   safeStorage: {
     isEncryptionAvailable: vi.fn(),
     decryptString: vi.fn(),
@@ -416,3 +416,4 @@ function scrubSettings(result: UserSettings) {
     telemetryUserId: "[scrubbed]",
   };
 }
+

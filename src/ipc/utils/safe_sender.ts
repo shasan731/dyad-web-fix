@@ -1,4 +1,4 @@
-import type { WebContents } from "electron";
+import type { WebContents } from "@/platform/electron";
 import log from "@/utils/simple_logger";
 
 /**
@@ -27,4 +27,5 @@ export function safeSend(
     );
   }
 }
+
 

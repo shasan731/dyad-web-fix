@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs-extra";
-import { app } from "electron";
+import { app } from "@/platform/electron";
 import { copyDirectoryRecursive } from "../utils/file_utils";
 import { gitClone, getCurrentCommitHash } from "../utils/git_utils";
 import { readSettings } from "@/main/settings";
@@ -166,4 +166,5 @@ async function copyRepoToApp(repoCachePath: string, appPath: string) {
     throw err; // Re-throw the error after logging
   }
 }
+
 

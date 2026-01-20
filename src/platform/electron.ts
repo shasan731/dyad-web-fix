@@ -1,76 +1,74 @@
-const crypto = require("crypto");
-const path = require("path");
+import crypto from "node:crypto";
+import path from "node:path";
+import { getUserDataPath } from "../paths/paths";
+
+type IpcHandler = (event: IpcMainInvokeEvent, ...args: any[]) => unknown;
+type Listener = (...args: unknown[]) => void;
+
+export type WebContents = {
+  send: (channel: string, ...args: unknown[]) => void;
+  isDestroyed: () => boolean;
+};
+
+export type IpcMainInvokeEvent = {
+  sender: WebContents;
+};
 
 class IpcMainStub {
-  constructor() {
-    this._handlers = new Map();
-    this._listeners = new Map();
+  private handlers = new Map<string, IpcHandler>();
+  private listeners = new Map<string, Set<Listener>>();
+
+  handle(channel: string, listener: IpcHandler) {
+    this.handlers.set(channel, listener);
   }
 
-  handle(channel, listener) {
-    this._handlers.set(channel, listener);
-  }
-
-  on(channel, listener) {
-    const listeners = this._listeners.get(channel) ?? new Set();
+  on(channel: string, listener: Listener) {
+    const listeners = this.listeners.get(channel) ?? new Set();
     listeners.add(listener);
-    this._listeners.set(channel, listeners);
+    this.listeners.set(channel, listeners);
   }
 
-  removeListener(channel, listener) {
-    const listeners = this._listeners.get(channel);
+  removeListener(channel: string, listener: Listener) {
+    const listeners = this.listeners.get(channel);
     if (!listeners) return;
     listeners.delete(listener);
   }
 
-  removeHandler(channel) {
-    this._handlers.delete(channel);
+  removeHandler(channel: string) {
+    this.handlers.delete(channel);
   }
 
-  async invoke(channel, event, ...args) {
-    const handler = this._handlers.get(channel);
-    if (!handler) {
-      throw new Error(`No IPC handler registered for ${channel}`);
-    }
-    return handler(event, ...args);
-  }
-
-  _getHandler(channel) {
-    return this._handlers.get(channel);
+  _getHandler(channel: string) {
+    return this.handlers.get(channel);
   }
 }
 
-const ipcMain = new IpcMainStub();
+export const ipcMain = new IpcMainStub();
 
-function getUserDataPath() {
-  return (
-    process.env.DYAD_USER_DATA_PATH ||
-    path.resolve(process.cwd(), "userData")
-  );
-}
+let cachedVersion: string | undefined;
 
-let cachedVersion = null;
-
-function getAppVersion() {
+function getAppVersion(): string {
   if (cachedVersion) return cachedVersion;
   try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const pkg = require(path.resolve(process.cwd(), "package.json"));
     cachedVersion = pkg?.version || "0.0.0";
   } catch {
     cachedVersion = "0.0.0";
   }
-  return cachedVersion;
+  return cachedVersion ?? "0.0.0";
 }
 
-const app = {
+export const app = {
   isPackaged: false,
   getAppPath() {
     return process.cwd();
   },
-  getPath(name) {
+  getPath(name: string) {
     if (name === "userData") return getUserDataPath();
-    if (name === "sessionData")
+    if (name === "sessionData") {
       return path.join(getUserDataPath(), "sessionData");
+    }
     return process.cwd();
   },
   getVersion() {
@@ -96,57 +94,59 @@ const app = {
   },
 };
 
-const dialog = {
-  async showOpenDialog() {
-    return { canceled: true, filePaths: [] };
+export const dialog = {
+  async showOpenDialog(_options?: unknown) {
+    return { canceled: true, filePaths: [] as string[] };
   },
-  async showMessageBox() {
+  async showMessageBox(_options?: unknown) {
     return { response: 1 };
   },
 };
 
-const shell = {
-  openExternal() {},
-  showItemInFolder() {},
+export const shell = {
+  async openExternal(_url?: string) {},
+  showItemInFolder(_path?: string) {},
 };
 
-const clipboard = {
-  writeImage() {},
+export const clipboard = {
+  writeImage(_image?: unknown) {},
 };
 
-const session = {
+export const session = {
   defaultSession: {
-    async clearStorageData() {},
+    async clearStorageData(_options?: unknown) {},
   },
 };
 
-function getBroadcastSender() {
-  const broadcaster = globalThis.__dyad_broadcast;
+function getBroadcastSender(): WebContents | null {
+  const broadcaster = (globalThis as any).__dyad_broadcast;
   if (typeof broadcaster === "function") {
     return {
-      send: (channel, ...args) => broadcaster(channel, ...args),
+      send: (channel: string, ...args: unknown[]) => broadcaster(channel, ...args),
       isDestroyed: () => false,
     };
   }
-  return globalThis.__dyad_last_sender || null;
+  return (globalThis as any).__dyad_last_sender || null;
 }
 
-class BrowserWindowStub {
-  constructor(sender) {
+export class BrowserWindow {
+  webContents: WebContents;
+
+  constructor(sender: WebContents) {
     this.webContents = sender;
   }
 
-  static getAllWindows() {
+  static getAllWindows(): BrowserWindow[] {
     const sender = getBroadcastSender();
     if (!sender) return [];
-    return [new BrowserWindowStub(sender)];
+    return [new BrowserWindow(sender)];
   }
 
-  static getFocusedWindow() {
+  static getFocusedWindow(): BrowserWindow | null {
     return null;
   }
 
-  static fromWebContents() {
+  static fromWebContents(_contents?: WebContents): BrowserWindow | null {
     return null;
   }
 
@@ -172,11 +172,11 @@ function getEncryptionKey() {
   return crypto.createHash("sha256").update(key).digest();
 }
 
-const safeStorage = {
+export const safeStorage = {
   isEncryptionAvailable() {
     return Boolean(getEncryptionKey());
   },
-  encryptString(plainText) {
+  encryptString(plainText: string) {
     const key = getEncryptionKey();
     if (!key) {
       return Buffer.from(plainText, "utf8");
@@ -190,7 +190,7 @@ const safeStorage = {
     const tag = cipher.getAuthTag();
     return Buffer.concat([iv, tag, encrypted]);
   },
-  decryptString(buffer) {
+  decryptString(buffer: Buffer) {
     const key = getEncryptionKey();
     if (!key) {
       return buffer.toString("utf8");
@@ -204,15 +204,4 @@ const safeStorage = {
       "utf8",
     );
   },
-};
-
-module.exports = {
-  ipcMain,
-  app,
-  dialog,
-  shell,
-  clipboard,
-  session,
-  BrowserWindow: BrowserWindowStub,
-  safeStorage,
 };

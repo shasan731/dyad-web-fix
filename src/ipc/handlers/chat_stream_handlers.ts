@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { ipcMain, IpcMainInvokeEvent } from "electron";
+import { ipcMain, IpcMainInvokeEvent } from "@/platform/electron";
 import {
   ModelMessage,
   TextPart,
@@ -1753,4 +1753,5 @@ async function getMcpTools(event: IpcMainInvokeEvent): Promise<ToolSet> {
   }
   return mcpToolSet;
 }
+
 

@@ -1,4 +1,9 @@
 {
   "buildCommand": "npm run web:build",
-  "outputDirectory": "dist/web"
+  "outputDirectory": "dist/web",
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "nodejs20.x"
+    }
+  }
 }

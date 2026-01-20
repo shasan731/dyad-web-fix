@@ -17,8 +17,8 @@ import {
 import { db } from "../../db";
 import { apps } from "../../db/schema";
 import { eq } from "drizzle-orm";
-import { ipcMain } from "electron";
-import type { IpcMainInvokeEvent } from "electron";
+import { ipcMain } from "@/platform/electron";
+import type { IpcMainInvokeEvent } from "@/platform/electron";
 import { EndpointType } from "@neondatabase/api-client";
 import { retryOnLocked } from "../utils/retryOnLocked";
 
@@ -234,4 +234,5 @@ export function registerNeonHandlers() {
     logger.info("Sent fake neon deep-link-received event during testing.");
   });
 }
+
 

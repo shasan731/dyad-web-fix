@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as fs from "fs/promises";
-import { app } from "electron";
+import { app } from "@/platform/electron";
 import * as crypto from "crypto";
 import log from "@/utils/simple_logger";
 import Database from "better-sqlite3";
@@ -388,4 +388,5 @@ export class BackupManager {
     logger.debug(`Current version saved: ${version}`);
   }
 }
+
 

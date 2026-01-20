@@ -1,4 +1,4 @@
-import { ipcMain, IpcMainInvokeEvent } from "electron";
+import { ipcMain, IpcMainInvokeEvent } from "@/platform/electron";
 import { Vercel } from "@vercel/sdk";
 import { writeSettings, readSettings } from "../../main/settings";
 import * as schema from "../../db/schema";
@@ -549,4 +549,5 @@ export async function updateAppVercelProject({
     })
     .where(eq(schema.apps.id, appId));
 }
+
 

@@ -19,7 +19,7 @@ import {
   language_models as languageModelsSchema,
 } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
-import { IpcMainInvokeEvent } from "electron";
+import { IpcMainInvokeEvent } from "@/platform/electron";
 
 const logger = log.scope("language_model_handlers");
 const handle = createLoggedHandler(logger);
@@ -370,4 +370,5 @@ export function registerLanguageModelHandlers() {
     },
   );
 }
+
 

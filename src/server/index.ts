@@ -6,7 +6,7 @@ import { registerIpcHandlers } from "@/ipc/ipc_host";
 import { initializeDatabase } from "@/db";
 import { VALID_INVOKE_CHANNELS } from "@/ipc/ipc_channels";
 import { cleanupOldAiMessagesJson } from "@/pro/main/ipc/handlers/local_agent/ai_messages_cleanup";
-import { ipcMain } from "electron";
+import { ipcMain } from "@/platform/electron";
 
 type Sender = {
   send: (channel: string, ...args: unknown[]) => void;
@@ -36,6 +36,7 @@ if (
 }
 
 const clientSockets = new Map<string, WebSocket>();
+const clientStreams = new Map<string, http.ServerResponse>();
 
 function getClientId(requestUrl: string | undefined): string | null {
   if (!requestUrl) return null;
@@ -55,18 +56,30 @@ function createSender(clientId: string | null): Sender {
     };
   }
   const socket = clientSockets.get(clientId);
-  if (!socket || socket.readyState !== WebSocket.OPEN) {
+  if (socket && socket.readyState === WebSocket.OPEN) {
     return {
-      send: () => {},
-      isDestroyed: () => true,
+      send: (channel, ...args) => {
+        if (socket.readyState !== WebSocket.OPEN) return;
+        socket.send(JSON.stringify({ channel, args }));
+      },
+      isDestroyed: () => socket.readyState !== WebSocket.OPEN,
     };
   }
+
+  const stream = clientStreams.get(clientId);
+  if (stream && !stream.writableEnded && !stream.destroyed) {
+    return {
+      send: (channel, ...args) => {
+        if (stream.writableEnded || stream.destroyed) return;
+        stream.write(`data: ${JSON.stringify({ channel, args })}\n\n`);
+      },
+      isDestroyed: () => stream.writableEnded || stream.destroyed,
+    };
+  }
+
   return {
-    send: (channel, ...args) => {
-      if (socket.readyState !== WebSocket.OPEN) return;
-      socket.send(JSON.stringify({ channel, args }));
-    },
-    isDestroyed: () => socket.readyState !== WebSocket.OPEN,
+    send: () => {},
+    isDestroyed: () => true,
   };
 }
 
@@ -77,10 +90,14 @@ function broadcast(channel: string, ...args: unknown[]) {
       socket.send(payload);
     }
   }
+  for (const stream of clientStreams.values()) {
+    if (stream.writableEnded || stream.destroyed) continue;
+    stream.write(`data: ${payload}\n\n`);
+  }
 }
 
 // Provide a broadcast hook for telemetry and other main-process events.
-// @ts-ignore - global injection for electron stub
+// @ts-ignore - global injection for IPC broadcast plumbing
 globalThis.__dyad_broadcast = broadcast;
 
 async function main() {
@@ -124,7 +141,7 @@ async function main() {
     }
 
     const sender = createSender(typeof clientId === "string" ? clientId : null);
-    // @ts-ignore - used by electron stub for broadcast fallback
+    // @ts-ignore - used by IPC broadcast fallback
     globalThis.__dyad_last_sender = sender;
 
     try {
@@ -144,6 +161,33 @@ async function main() {
         error: error?.message || String(error),
       });
     }
+  });
+
+  app.get("/api/ipc/events", (req, res) => {
+    const clientId = getClientId(req.url || undefined);
+    if (!clientId) {
+      res.status(400).json({ error: "Missing clientId" });
+      return;
+    }
+
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+    res.setHeader("X-Accel-Buffering", "no");
+
+    res.write(`data: ${JSON.stringify({ type: "connected", clientId })}\n\n`);
+
+    const heartbeat = setInterval(() => {
+      res.write(": heartbeat\n\n");
+    }, 30000);
+
+    clientStreams.set(clientId, res);
+
+    req.on("close", () => {
+      clearInterval(heartbeat);
+      clientStreams.delete(clientId);
+      res.end();
+    });
   });
 
   const distDir =
@@ -179,3 +223,4 @@ main().catch((error) => {
   console.error("Failed to start Dyad web server:", error);
   process.exit(1);
 });
+

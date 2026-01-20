@@ -1,5 +1,5 @@
-import { BrowserWindow, ipcMain } from "electron";
-import type { IpcMainInvokeEvent } from "electron";
+import { BrowserWindow, ipcMain } from "@/platform/electron";
+import type { IpcMainInvokeEvent } from "@/platform/electron";
 import log from "@/utils/simple_logger";
 import { platform } from "os";
 
@@ -52,4 +52,5 @@ export function registerWindowHandlers() {
   ipcMain.handle("window:close", handleClose);
   ipcMain.handle("get-system-platform", handleGetSystemPlatform);
 }
+
 

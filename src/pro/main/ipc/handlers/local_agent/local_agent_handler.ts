@@ -3,7 +3,7 @@
  * Main orchestrator for tool-based agent mode with parallel execution
  */
 
-import { IpcMainInvokeEvent } from "electron";
+import { IpcMainInvokeEvent } from "@/platform/electron";
 import {
   streamText,
   ToolSet,
@@ -566,4 +566,5 @@ async function getMcpTools(
 
   return mcpToolSet;
 }
+
 

@@ -1,5 +1,5 @@
-import { ipcMain } from "electron";
-import type { IpcMainInvokeEvent } from "electron";
+import { ipcMain } from "@/platform/electron";
+import type { IpcMainInvokeEvent } from "@/platform/electron";
 import { streamText, Tool } from "ai";
 import { readSettings } from "../../main/settings";
 
@@ -136,4 +136,5 @@ export function registerHelpBotHandlers() {
     },
   );
 }
+
 

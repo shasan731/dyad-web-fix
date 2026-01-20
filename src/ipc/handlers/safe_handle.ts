@@ -1,4 +1,4 @@
-import { ipcMain, IpcMainInvokeEvent } from "electron";
+import { ipcMain, IpcMainInvokeEvent } from "@/platform/electron";
 import log from "@/utils/simple_logger";
 import type { ScopedLogger } from "@/utils/simple_logger";
 import { IS_TEST_BUILD } from "../utils/test_utils";
@@ -37,4 +37,5 @@ export function createTestOnlyLoggedHandler(logger: ScopedLogger) {
   }
   return createLoggedHandler(logger);
 }
+
 

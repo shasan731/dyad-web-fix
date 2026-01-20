@@ -2,13 +2,19 @@ import path from "node:path";
 import os from "node:os";
 import { IS_TEST_BUILD } from "../ipc/utils/test_utils";
 
+function isServerless(): boolean {
+  return Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+}
+
 /**
  * Gets the base dyad-apps directory path (without a specific app subdirectory)
  */
 export function getDyadAppsBaseDirectory(): string {
-  if (IS_TEST_BUILD) {
-    const electron = getElectron();
-    return path.join(electron!.app.getPath("userData"), "dyad-apps");
+  if (process.env.DYAD_APPS_PATH) {
+    return process.env.DYAD_APPS_PATH;
+  }
+  if (IS_TEST_BUILD || isServerless()) {
+    return path.join(getUserDataPath(), "dyad-apps");
   }
   return path.join(os.homedir(), "dyad-apps");
 }
@@ -23,43 +29,21 @@ export function getDyadAppPath(appPath: string): string {
 }
 
 export function getTypeScriptCachePath(): string {
-  const electron = getElectron();
-  if (electron?.app) {
-    return path.join(electron.app.getPath("sessionData"), "typescript-cache");
-  }
   return path.join(getUserDataPath(), "typescript-cache");
 }
 
 /**
- * Gets the user data path, handling both Electron and non-Electron environments
- * In Electron: returns the app's userData directory
- * In non-Electron: returns "./userData" in the current directory
+ * Gets the user data path for the current runtime.
+ * Prefers DYAD_USER_DATA_PATH, falls back to /tmp in serverless,
+ * and finally to ./userData in local environments.
  */
 
 export function getUserDataPath(): string {
-  const electron = getElectron();
-
-  // When running in Electron and app is ready
-  if (process.env.NODE_ENV !== "development" && electron) {
-    return electron!.app.getPath("userData");
+  if (process.env.DYAD_USER_DATA_PATH) {
+    return process.env.DYAD_USER_DATA_PATH;
   }
-
-  // For development or when the Electron app object isn't available
+  if (isServerless()) {
+    return path.join(os.tmpdir(), "dyad-userData");
+  }
   return path.resolve("./userData");
-}
-
-/**
- * Get a reference to electron in a way that won't break in non-electron environments
- */
-export function getElectron(): typeof import("electron") | undefined {
-  let electron: typeof import("electron") | undefined;
-  try {
-    // Check if we're in an Electron environment
-    if (process.versions.electron) {
-      electron = require("electron");
-    }
-  } catch {
-    // Not in Electron environment
-  }
-  return electron;
 }

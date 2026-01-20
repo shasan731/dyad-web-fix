@@ -1,4 +1,4 @@
-import { type IpcMainInvokeEvent } from "electron";
+import { type IpcMainInvokeEvent } from "@/platform/electron";
 import type {
   CodeProposal,
   ProposalResult,
@@ -426,4 +426,5 @@ export function registerProposalHandlers() {
   handle("approve-proposal", approveProposalHandler);
   handle("reject-proposal", rejectProposalHandler);
 }
+
 

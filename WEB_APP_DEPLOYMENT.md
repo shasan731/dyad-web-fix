@@ -6,7 +6,7 @@ This document explains the changes made to remove Electron and create a fully we
 
 ### 1. **Removed Electron Dependency**
 - Removed `electron` and `electron-log` from `package.json`
-- The app now uses `electron-stub.js` (always active) which provides mock Electron APIs in web mode
+- The app now uses `src/platform/electron.ts` which provides mock Electron APIs in web mode
 
 ### 2. **Replaced electron-log**
 - Created `src/utils/simple_logger.ts` - a drop-in replacement for electron-log
@@ -15,8 +15,8 @@ This document explains the changes made to remove Electron and create a fully we
 
 ### 3. **Web Mode Configuration**
 - `DYAD_WEB_MODE=true` is always set in `server/index.js` and Vercel API handlers
-- The electron stub intercepts all `import { ... } from "electron"` statements
-- This allows the code to work without native Electron modules
+- The code imports `@/platform/electron` instead of the Electron module
+- This keeps the runtime fully web compatible without native Electron modules
 
 ### 4. **Created Vercel API Handlers**
 - `api/ipc/invoke.ts` - Handles POST requests to `/api/ipc/invoke` for IPC calls
@@ -30,7 +30,7 @@ This document explains the changes made to remove Electron and create a fully we
 npm start 
   → builds web app (Vite)
   → starts Express server on port 3000
-  → loads electron stub (server/register-electron-stub.js)
+  → uses platform stub (src/platform/electron.ts)
   → frontend makes API calls to /api/ipc/* endpoints
 ```
 
@@ -157,7 +157,7 @@ The `vercel.json` configuration:
 ## Troubleshooting
 
 ### Issue: "Cannot find module 'electron'"
-**Solution**: Ensure electron-stub is properly loaded. Check that `register-electron-stub.js` is required first.
+**Solution**: Ensure the code imports `@/platform/electron` and that the serverless handler loads `tsconfig-paths/register` before app modules.
 
 ### Issue: "IPC invoke returns 404"
 **Solution**: Ensure the API route exists in `api/ipc/invoke.ts` and Vercel deployment includes the `api/` directory.

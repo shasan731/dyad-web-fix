@@ -269,7 +269,7 @@ kill $(lsof -t -i:3000)
 ## Key Changes Made for Web Deployment
 
 ✅ Removed all Electron dependencies
-✅ Created electron-stub for API compatibility
+✅ Added `src/platform/electron.ts` for API compatibility
 ✅ Replaced electron-log with simple_logger
 ✅ Added Vercel API handlers
 ✅ Updated build configuration

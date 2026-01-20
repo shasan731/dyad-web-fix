@@ -1,5 +1,5 @@
-import { ipcMain } from "electron";
-import type { IpcMainInvokeEvent } from "electron";
+import { ipcMain } from "@/platform/electron";
+import type { IpcMainInvokeEvent } from "@/platform/electron";
 import type { UserSettings } from "../../lib/schemas";
 import { writeSettings } from "../../main/settings";
 import { readSettings } from "../../main/settings";
@@ -20,3 +20,4 @@ export function registerSettingsHandlers() {
     },
   );
 }
+

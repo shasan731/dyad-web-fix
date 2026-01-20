@@ -14,10 +14,12 @@ type WebIpcRendererOptions = {
 
 export class WebIpcRenderer {
   private socket: WebSocket | null = null;
+  private eventSource: EventSource | null = null;
   private listeners = new Map<string, Set<Listener>>();
   private clientId: string;
   private baseUrl: string;
   private reconnectTimer: number | null = null;
+  private transportOverride: "ws" | "sse" | null = null;
 
   constructor(options: WebIpcRendererOptions = {}) {
     this.baseUrl =
@@ -25,6 +27,13 @@ export class WebIpcRenderer {
       // @ts-ignore
       import.meta.env?.VITE_DYAD_API_BASE_URL ||
       window.location.origin;
+    const preferredTransport = (
+      // @ts-ignore
+      import.meta.env?.VITE_DYAD_IPC_TRANSPORT as string | undefined
+    )?.toLowerCase();
+    if (preferredTransport === "ws" || preferredTransport === "sse") {
+      this.transportOverride = preferredTransport;
+    }
     this.clientId = this.getOrCreateClientId();
     this.connect();
   }
@@ -46,11 +55,41 @@ export class WebIpcRenderer {
       this.socket.close();
       this.socket = null;
     }
+    if (this.eventSource) {
+      this.eventSource.close();
+      this.eventSource = null;
+    }
 
+    if (this.transportOverride === "sse") {
+      this.connectSse();
+      return;
+    }
+    this.connectWebSocket();
+  }
+
+  private connectWebSocket() {
     const url = new URL("/api/ipc/events", this.baseUrl);
     url.searchParams.set("clientId", this.clientId);
     const wsUrl = url.toString().replace(/^http/, "ws");
     const socket = new WebSocket(wsUrl);
+    let hasOpened = false;
+    const fallbackToSse = () => {
+      if (this.transportOverride === "ws") return;
+      if (!this.transportOverride) {
+        this.transportOverride = "sse";
+      }
+      this.connectSse();
+    };
+    const fallbackTimer = window.setTimeout(() => {
+      if (hasOpened) return;
+      socket.close();
+      fallbackToSse();
+    }, 1500);
+
+    socket.onopen = () => {
+      hasOpened = true;
+      window.clearTimeout(fallbackTimer);
+    };
 
     socket.onmessage = (event) => {
       try {
@@ -74,7 +113,18 @@ export class WebIpcRenderer {
       }
     };
 
+    socket.onerror = () => {
+      if (hasOpened) return;
+      window.clearTimeout(fallbackTimer);
+      socket.close();
+      fallbackToSse();
+    };
+
     socket.onclose = () => {
+      if (!hasOpened && this.transportOverride !== "ws") {
+        fallbackToSse();
+        return;
+      }
       if (this.reconnectTimer != null) {
         window.clearTimeout(this.reconnectTimer);
       }
@@ -84,6 +134,56 @@ export class WebIpcRenderer {
     };
 
     this.socket = socket;
+  }
+
+  private connectSse() {
+    if (typeof EventSource === "undefined") {
+      console.warn("EventSource not available; falling back to WebSocket");
+      this.transportOverride = "ws";
+      this.connectWebSocket();
+      return;
+    }
+    const url = new URL("/api/ipc/events", this.baseUrl);
+    url.searchParams.set("clientId", this.clientId);
+    const source = new EventSource(url.toString());
+
+    source.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data as string) as {
+          channel: string;
+          args?: unknown[];
+        };
+        if (!data?.channel) return;
+        if (!VALID_RECEIVE_CHANNELS.includes(data.channel as any)) {
+          return;
+        }
+        const listeners = this.listeners.get(data.channel);
+        if (!listeners || listeners.size === 0) {
+          return;
+        }
+        const args = Array.isArray(data.args) ? data.args : [];
+        for (const listener of listeners) {
+          listener(...args);
+        }
+      } catch (error) {
+        console.warn("Failed to parse IPC event:", error);
+      }
+    };
+
+    source.onerror = () => {
+      source.close();
+      if (this.eventSource === source) {
+        this.eventSource = null;
+      }
+      if (this.reconnectTimer != null) {
+        window.clearTimeout(this.reconnectTimer);
+      }
+      this.reconnectTimer = window.setTimeout(() => {
+        this.connect();
+      }, 1000);
+    };
+
+    this.eventSource = source;
   }
 
   public async invoke(channel: ValidInvokeChannel, ...args: unknown[]) {

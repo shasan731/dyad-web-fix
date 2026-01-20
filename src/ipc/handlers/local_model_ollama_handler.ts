@@ -1,4 +1,4 @@
-import { ipcMain } from "electron";
+import { ipcMain } from "@/platform/electron";
 import log from "@/utils/simple_logger";
 import { LocalModelListResponse, LocalModel } from "../ipc_types";
 
@@ -104,4 +104,5 @@ export function registerOllamaHandlers() {
     },
   );
 }
+
 

@@ -27,7 +27,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "files": ["src/types/electron.d.ts"],
   "include": ["src", "shared"],
   "exclude": ["e2e-tests/fixtures"]
 }

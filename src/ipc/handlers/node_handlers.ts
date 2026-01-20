@@ -1,4 +1,4 @@
-import { ipcMain, dialog } from "electron";
+import { ipcMain, dialog } from "@/platform/electron";
 import { execSync } from "child_process";
 import { platform, arch } from "os";
 import { NodeSystemInfo } from "../ipc_types";
@@ -102,4 +102,5 @@ export function registerNodeHandlers() {
     return { path: selectedPath, canceled: false, selectedPath };
   });
 }
+
 

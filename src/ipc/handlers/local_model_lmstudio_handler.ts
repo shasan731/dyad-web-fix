@@ -1,4 +1,4 @@
-import { ipcMain } from "electron";
+import { ipcMain } from "@/platform/electron";
 import log from "@/utils/simple_logger";
 import type { LocalModelListResponse, LocalModel } from "../ipc_types";
 import { LM_STUDIO_BASE_URL } from "../utils/lm_studio_utils";
@@ -47,4 +47,5 @@ export function registerLMStudioHandlers() {
     },
   );
 }
+
 

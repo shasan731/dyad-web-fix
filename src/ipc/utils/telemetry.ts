@@ -1,4 +1,4 @@
-import { BrowserWindow } from "electron";
+import { BrowserWindow } from "@/platform/electron";
 import log from "@/utils/simple_logger";
 import { TelemetryEventPayload } from "../ipc_types";
 
@@ -24,4 +24,5 @@ export function sendTelemetryEvent(
     logger.warn("Error sending telemetry event:", error);
   }
 }
+
 

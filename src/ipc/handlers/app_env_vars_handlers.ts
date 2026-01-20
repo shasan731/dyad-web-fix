@@ -2,8 +2,8 @@
  * DO NOT USE LOGGER HERE.
  * Environment variables are sensitive and should not be logged.
  */
-import { ipcMain } from "electron";
-import type { IpcMainInvokeEvent } from "electron";
+import { ipcMain } from "@/platform/electron";
+import type { IpcMainInvokeEvent } from "@/platform/electron";
 import * as fs from "fs";
 import * as path from "path";
 import { db } from "../../db";
@@ -87,3 +87,4 @@ export function registerAppEnvVarsHandlers() {
     },
   );
 }
+

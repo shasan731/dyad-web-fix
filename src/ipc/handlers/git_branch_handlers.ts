@@ -1,4 +1,4 @@
-import { ipcMain, IpcMainInvokeEvent } from "electron";
+import { ipcMain, IpcMainInvokeEvent } from "@/platform/electron";
 import { readSettings } from "../../main/settings";
 import {
   gitMergeAbort,
@@ -307,4 +307,5 @@ export function registerGithubBranchHandlers() {
   ipcMain.handle("github:list-local-branches", handleListLocalBranches);
   ipcMain.handle("github:list-remote-branches", handleListRemoteBranches);
 }
+
 

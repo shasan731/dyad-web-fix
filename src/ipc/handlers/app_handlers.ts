@@ -1,5 +1,5 @@
-import { ipcMain, app, dialog } from "electron";
-import type { IpcMainInvokeEvent } from "electron";
+import { ipcMain, app, dialog } from "@/platform/electron";
+import type { IpcMainInvokeEvent } from "@/platform/electron";
 import { db, getDatabasePath } from "../../db";
 import { apps, chats, messages } from "../../db/schema";
 import { desc, eq, like } from "drizzle-orm";
@@ -2152,4 +2152,5 @@ async function cleanUpPort(port: number) {
     await killProcessOnPort(port);
   }
 }
+
 

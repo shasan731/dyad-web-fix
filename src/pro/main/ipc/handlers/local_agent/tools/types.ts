@@ -3,7 +3,7 @@
  */
 
 import { z } from "zod";
-import { IpcMainInvokeEvent } from "electron";
+import { IpcMainInvokeEvent } from "@/platform/electron";
 import { jsonrepair } from "jsonrepair";
 import { AgentToolConsent } from "@/lib/schemas";
 import { AgentTodo } from "@/ipc/ipc_types";
@@ -150,3 +150,4 @@ export interface ToolDefinition<T = any> {
    */
   buildXml?: (args: Partial<T>, isComplete: boolean) => string | undefined;
 }
+

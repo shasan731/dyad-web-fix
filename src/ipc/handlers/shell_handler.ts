@@ -1,4 +1,4 @@
-import { shell } from "electron";
+import { shell } from "@/platform/electron";
 import log from "@/utils/simple_logger";
 import { createLoggedHandler } from "./safe_handle";
 
@@ -27,4 +27,5 @@ export function registerShellHandlers() {
     logger.debug("Showed item in folder:", fullPath);
   });
 }
+
 

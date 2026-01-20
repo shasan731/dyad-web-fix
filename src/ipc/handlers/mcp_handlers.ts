@@ -1,4 +1,4 @@
-import { IpcMainInvokeEvent } from "electron";
+import { IpcMainInvokeEvent } from "@/platform/electron";
 import log from "@/utils/simple_logger";
 import { db } from "../../db";
 import { mcpServers, mcpToolConsents } from "../../db/schema";
@@ -161,4 +161,5 @@ export function registerMcpHandlers() {
     },
   );
 }
+
 

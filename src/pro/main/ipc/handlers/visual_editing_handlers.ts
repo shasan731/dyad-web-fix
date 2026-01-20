@@ -1,5 +1,5 @@
-import { ipcMain } from "electron";
-import type { IpcMainInvokeEvent } from "electron";
+import { ipcMain } from "@/platform/electron";
+import type { IpcMainInvokeEvent } from "@/platform/electron";
 import fs from "node:fs";
 import { promises as fsPromises } from "node:fs";
 import path from "path";
@@ -127,3 +127,4 @@ export function registerVisualEditingHandlers() {
     },
   );
 }
+

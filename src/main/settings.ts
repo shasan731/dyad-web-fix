@@ -7,7 +7,7 @@ import {
   Secret,
   VertexProviderSetting,
 } from "../lib/schemas";
-import { safeStorage } from "electron";
+import { safeStorage } from "@/platform/electron";
 import { v4 as uuidv4 } from "uuid";
 import log from "@/utils/simple_logger";
 import { DEFAULT_TEMPLATE_ID } from "@/shared/templates";
@@ -287,4 +287,5 @@ export function decrypt(data: Secret): string {
   }
   return data.value;
 }
+
 

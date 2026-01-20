@@ -2,7 +2,7 @@
  * Shared utilities for ripgrep integration
  */
 
-import { app } from "electron";
+import { app } from "@/platform/electron";
 import path from "node:path";
 import os from "node:os";
 
@@ -44,3 +44,4 @@ export function getRgExecutablePath(): string {
     executableName,
   );
 }
+
