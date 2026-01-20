@@ -70,8 +70,7 @@
     "typescript": "^5.8.3",
     "vite": "^5.4.17",
     "vitest": "^3.1.1",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0"
+    "ts-node": "^10.9.2"
   },
   "dependencies": {
     "@ai-sdk/amazon-bedrock": "^4.0.9",
@@ -166,7 +165,8 @@
     "uuid": "^11.1.0",
     "zod": "^3.25.76",
     "express": "^4.21.2",
-    "ws": "^8.18.3"
+    "ws": "^8.18.3",
+    "tsconfig-paths": "^4.2.0"
   },
   "overrides": {
     "@vercel/sdk": {

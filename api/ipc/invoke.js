@@ -1,19 +1,16 @@
-import "tsconfig-paths/register";
+const path = require("path");
 
-import { initializeDatabase } from "../../src/db";
-import { VALID_INVOKE_CHANNELS } from "../../src/ipc/ipc_channels";
-import { registerIpcHandlers } from "../../src/ipc/ipc_host";
-import { ipcMain } from "../../src/platform/electron";
-import { cleanupOldAiMessagesJson } from "../../src/pro/main/ipc/handlers/local_agent/ai_messages_cleanup";
-import { broadcast, publishToClient } from "../../src/server/event_bus";
+module.exports = async (req, res) => {
+  // Enable TS + path aliases for server-side imports.
+  require("esbuild-register/dist/node").register({ target: "es2022" });
+  if (!process.env.TS_NODE_PROJECT) {
+    process.env.TS_NODE_PROJECT = path.resolve(
+      __dirname,
+      "../../tsconfig.server.json",
+    );
+  }
+  require("tsconfig-paths/register");
 
-type InvokePayload = {
-  channel?: string;
-  args?: unknown[];
-  clientId?: string;
-};
-
-export default async function handler(req: any, res: any) {
   if (!process.env.DYAD_WEB_MODE) {
     process.env.DYAD_WEB_MODE = "true";
   }
@@ -33,28 +30,36 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    if (!(globalThis as any).__dyad_initialized) {
+    if (!globalThis.__dyad_initialized) {
+      const { initializeDatabase } = require("../../src/db");
+      const { registerIpcHandlers } = require("../../src/ipc/ipc_host");
+      const { cleanupOldAiMessagesJson } = require("../../src/pro/main/ipc/handlers/local_agent/ai_messages_cleanup");
       initializeDatabase();
       cleanupOldAiMessagesJson();
       registerIpcHandlers();
-      (globalThis as any).__dyad_initialized = true;
+      globalThis.__dyad_initialized = true;
     }
 
-    if (!(globalThis as any).__dyad_broadcast) {
-      (globalThis as any).__dyad_broadcast = (channel: string, ...args: unknown[]) =>
+    if (!globalThis.__dyad_broadcast) {
+      const { broadcast } = require("../../src/server/event_bus");
+      globalThis.__dyad_broadcast = (channel, ...args) =>
         broadcast({ channel, args });
     }
 
+    const { VALID_INVOKE_CHANNELS } = require("../../src/ipc/ipc_channels");
+    const { ipcMain } = require("../../src/platform/electron");
+    const { publishToClient } = require("../../src/server/event_bus");
+
     const parsedBody =
       typeof req.body === "string" ? JSON.parse(req.body) : req.body;
-    const { channel, args, clientId } = (parsedBody || {}) as InvokePayload;
+    const { channel, args, clientId } = parsedBody || {};
 
     if (!channel || typeof channel !== "string") {
       res.status(400).json({ ok: false, error: "Missing channel" });
       return;
     }
 
-    if (!VALID_INVOKE_CHANNELS.includes(channel as any)) {
+    if (!VALID_INVOKE_CHANNELS.includes(channel)) {
       res.status(400).json({ ok: false, error: `Invalid channel: ${channel}` });
       return;
     }
@@ -80,31 +85,31 @@ export default async function handler(req: any, res: any) {
       }
     }
 
-    const handler = (ipcMain as any)._getHandler(channel);
+    const handler = ipcMain._getHandler(channel);
     if (!handler) {
       res.status(404).json({ ok: false, error: `No handler for ${channel}` });
       return;
     }
 
     const sender = {
-      send: (ch: string, ...senderArgs: unknown[]) => {
+      send: (ch, ...senderArgs) => {
         if (typeof clientId !== "string") return;
         publishToClient(clientId, { channel: ch, args: senderArgs });
       },
       isDestroyed: () => false,
     };
 
-    (globalThis as any).__dyad_last_sender = sender;
+    globalThis.__dyad_last_sender = sender;
 
     const event = { sender };
     const result = await handler(event, ...(Array.isArray(args) ? args : []));
 
     res.status(200).json({ ok: true, result });
-  } catch (error: any) {
+  } catch (error) {
     console.error("IPC invoke error:", error);
     res.status(500).json({
       ok: false,
       error: error?.message || String(error),
     });
   }
-}
+};
