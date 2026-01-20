@@ -4,7 +4,7 @@ import { platform, arch } from "os";
 import { NodeSystemInfo } from "../ipc_types";
 import fixPath from "fix-path";
 import { runShellCommand } from "../utils/runShellCommand";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { existsSync } from "fs";
 import { join } from "path";
 import { readSettings } from "../../main/settings";
@@ -102,3 +102,4 @@ export function registerNodeHandlers() {
     return { path: selectedPath, canceled: false, selectedPath };
   });
 }
+

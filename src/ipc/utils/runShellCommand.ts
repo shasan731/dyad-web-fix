@@ -1,5 +1,5 @@
 import { spawn } from "child_process";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 const logger = log.scope("runShellCommand");
 
@@ -39,3 +39,4 @@ export function runShellCommand(command: string): Promise<string | null> {
     });
   });
 }
+

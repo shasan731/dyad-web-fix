@@ -20,7 +20,7 @@ import { getDyadAppPath } from "../../paths/paths";
 import { db } from "../../db";
 import { apps } from "../../db/schema";
 import { eq } from "drizzle-orm";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { withLock } from "../utils/lock_utils";
 import { updateAppGithubRepo, ensureCleanWorkspace } from "./github_handlers";
 
@@ -307,3 +307,4 @@ export function registerGithubBranchHandlers() {
   ipcMain.handle("github:list-local-branches", handleListLocalBranches);
   ipcMain.handle("github:list-remote-branches", handleListRemoteBranches);
 }
+

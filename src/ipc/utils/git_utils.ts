@@ -6,7 +6,7 @@ import fs from "node:fs";
 import { promises as fsPromises } from "node:fs";
 import pathModule from "node:path";
 import { readSettings } from "../../main/settings";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { normalizePath } from "../../../shared/normalizePath";
 const logger = log.scope("git_utils");
 import type {
@@ -1225,3 +1225,4 @@ export function isGitRebaseInProgress({ path }: GitBaseParams): boolean {
   }
   return false;
 }
+

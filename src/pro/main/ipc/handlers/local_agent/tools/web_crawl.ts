@@ -1,5 +1,5 @@
 import { z } from "zod";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { ToolDefinition, escapeXmlContent, AgentContext } from "./types";
 import { engineFetch } from "./engine_fetch";
 
@@ -138,3 +138,4 @@ function truncateText(value: string): string {
   if (value.length <= MAX_TEXT_SNIPPET_LENGTH) return value;
   return `${value.slice(0, MAX_TEXT_SNIPPET_LENGTH)}\n<!-- truncated -->`;
 }
+

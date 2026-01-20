@@ -4,7 +4,7 @@ import { apps } from "../../db/schema";
 import { eq } from "drizzle-orm";
 import { generateProblemReport } from "../processors/tsc";
 import { getDyadAppPath } from "@/paths/paths";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { createLoggedHandler } from "./safe_handle";
 
 const logger = log.scope("problems_handlers");
@@ -38,3 +38,4 @@ export function registerProblemsHandlers() {
     }
   });
 }
+

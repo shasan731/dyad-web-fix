@@ -12,7 +12,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { getDyadAppPath } from "../../paths/paths";
 import { withLock } from "../utils/lock_utils";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { createLoggedHandler } from "./safe_handle";
 
 import { deployAllSupabaseFunctions } from "../../supabase_admin/supabase_utils";
@@ -496,3 +496,4 @@ async function switchPostgresToDevelopmentBranch({
     disabled: false,
   });
 }
+

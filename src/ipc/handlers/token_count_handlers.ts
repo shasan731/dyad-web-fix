@@ -11,7 +11,7 @@ import {
   SUPABASE_NOT_AVAILABLE_SYSTEM_PROMPT,
 } from "../../prompts/supabase_prompt";
 import { getDyadAppPath } from "../../paths/paths";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { extractCodebase } from "../../utils/codebase";
 import { getSupabaseContext } from "../../supabase_admin/supabase_context";
 
@@ -168,3 +168,4 @@ export function registerTokenCountHandlers() {
     },
   );
 }
+

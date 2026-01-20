@@ -1,4 +1,4 @@
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 import { createTestOnlyLoggedHandler } from "./safe_handle";
 import { handleNeonOAuthReturn } from "../../neon_admin/neon_return_handler";
@@ -234,3 +234,4 @@ export function registerNeonHandlers() {
     logger.info("Sent fake neon deep-link-received event during testing.");
   });
 }
+

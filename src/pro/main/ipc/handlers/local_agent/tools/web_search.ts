@@ -1,5 +1,5 @@
 import { z } from "zod";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import {
   ToolDefinition,
   AgentContext,
@@ -181,3 +181,4 @@ export const webSearchTool: ToolDefinition<z.infer<typeof webSearchSchema>> = {
     return result;
   },
 };
+

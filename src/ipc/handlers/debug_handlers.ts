@@ -4,7 +4,7 @@ import { platform, arch } from "os";
 import { SystemDebugInfo, ChatLogsData } from "../ipc_types";
 import { readSettings } from "../../main/settings";
 
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import path from "path";
 import fs from "fs";
 import { runShellCommand } from "../utils/runShellCommand";
@@ -69,33 +69,38 @@ async function getSystemDebugInfo({
   const settings = readSettings();
   const telemetryId = settings.telemetryUserId || "unknown";
 
-  // Get logs from electron-log
+  // Get logs from electron-log (or file system in web mode)
   let logs = "";
   try {
-    const logPath = log.transports.file.getFile().path;
-    if (fs.existsSync(logPath)) {
-      const logContent = fs.readFileSync(logPath, "utf8");
+    // In web mode, transports.file might not exist
+    if (log.transports && (log.transports as any).file && typeof (log.transports as any).file.getFile === 'function') {
+      const logPath = (log.transports as any).file.getFile().path;
+      if (fs.existsSync(logPath)) {
+        const logContent = fs.readFileSync(logPath, "utf8");
 
-      const logLines = logContent.split("\n").filter((line) => {
-        if (level === "info") {
+        const logLines = logContent.split("\n").filter((line) => {
+          if (level === "info") {
+            return true;
+          }
+          // Example line:
+          // [2025-06-09 13:55:05.209] [debug] (runShellCommand) Command "which node" succeeded with code 0: /usr/local/bin/node
+          const logLevelRegex = /\[.*?\] \[(\w+)\]/;
+          const match = line.match(logLevelRegex);
+          if (!match) {
+            // Include non-matching lines (like stack traces) when filtering for warnings
+            return true;
+          }
+          const logLevel = match[1];
+          if (level === "warn") {
+            return logLevel === "warn" || logLevel === "error";
+          }
           return true;
-        }
-        // Example line:
-        // [2025-06-09 13:55:05.209] [debug] (runShellCommand) Command "which node" succeeded with code 0: /usr/local/bin/node
-        const logLevelRegex = /\[.*?\] \[(\w+)\]/;
-        const match = line.match(logLevelRegex);
-        if (!match) {
-          // Include non-matching lines (like stack traces) when filtering for warnings
-          return true;
-        }
-        const logLevel = match[1];
-        if (level === "warn") {
-          return logLevel === "warn" || logLevel === "error";
-        }
-        return true;
-      });
+        });
 
-      logs = logLines.slice(-linesOfLogs).join("\n");
+        logs = logLines.slice(-linesOfLogs).join("\n");
+      }
+    } else {
+      logs = "[Web Mode] File logging not available. Logs are sent to browser console.";
     }
   } catch (err) {
     console.error("Failed to read log file:", err);
@@ -219,3 +224,4 @@ export function registerDebugHandlers() {
 function serializeModelForDebug(model: LargeLanguageModel): string {
   return `${model.provider}:${model.name} | customId: ${model.customModelId}`;
 }
+

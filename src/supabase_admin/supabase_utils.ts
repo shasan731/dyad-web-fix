@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import {
   bulkUpdateFunctions,
   deploySupabaseFunction,

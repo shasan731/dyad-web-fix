@@ -9,7 +9,7 @@ import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import path from "node:path";
 import fs from "node:fs";
 import { getDyadAppPath, getUserDataPath } from "../paths/paths";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 const logger = log.scope("db");
 
@@ -95,3 +95,4 @@ export const db = new Proxy({} as any, {
 }) as BetterSQLite3Database<typeof schema> & {
   $client: Database.Database;
 };
+

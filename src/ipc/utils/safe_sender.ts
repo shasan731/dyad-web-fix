@@ -1,5 +1,5 @@
 import type { WebContents } from "electron";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 /**
  * Sends an IPC message to the renderer only if the provided `WebContents` is
@@ -27,3 +27,4 @@ export function safeSend(
     );
   }
 }
+

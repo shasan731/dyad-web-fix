@@ -11,7 +11,7 @@ import {
   type AgentToolName,
 } from "./tool_definitions";
 import { createLoggedHandler } from "@/ipc/handlers/safe_handle";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import type {
   AgentTool,
   SetAgentToolConsentParams,
@@ -49,3 +49,4 @@ export function registerAgentToolHandlers() {
     },
   );
 }
+

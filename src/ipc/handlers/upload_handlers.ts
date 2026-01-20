@@ -1,4 +1,4 @@
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import fetch from "node-fetch";
 import { createLoggedHandler } from "./safe_handle";
 
@@ -47,3 +47,4 @@ export function registerUploadHandlers() {
 
   logger.debug("Registered upload IPC handlers");
 }
+

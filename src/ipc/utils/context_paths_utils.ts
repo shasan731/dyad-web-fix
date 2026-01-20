@@ -1,5 +1,5 @@
 import { AppChatContext, AppChatContextSchema } from "@/lib/schemas";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 const logger = log.scope("context_paths_utils");
 
@@ -25,3 +25,4 @@ export function validateChatContext(chatContext: unknown): AppChatContext {
     };
   }
 }
+

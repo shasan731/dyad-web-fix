@@ -6,7 +6,7 @@ import { getDyadAppPath } from "../../paths/paths";
 import path from "node:path";
 import { safeJoin } from "../utils/path_utils";
 
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { executeAddDependency } from "./executeAddDependency";
 import {
   deleteSupabaseFunction,
@@ -631,3 +631,4 @@ export async function processFullResponseActions(
     }
   }
 }
+

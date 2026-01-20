@@ -6,7 +6,7 @@ import {
   SupabaseManagementAPI,
   SupabaseManagementAPIError,
 } from "@dyad-sh/supabase-management-js";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { IS_TEST_BUILD } from "../ipc/utils/test_utils";
 import type { SupabaseOrganizationCredentials } from "../lib/schemas";
 import {

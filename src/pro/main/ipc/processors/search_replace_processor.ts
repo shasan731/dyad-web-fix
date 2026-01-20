@@ -3,7 +3,7 @@
 import { parseSearchReplaceBlocks } from "@/pro/shared/search_replace_parser";
 import { distance } from "fastest-levenshtein";
 import { normalizeString } from "@/utils/text_normalization";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 const logger = log.scope("search_replace_processor");
 

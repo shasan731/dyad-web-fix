@@ -2,8 +2,8 @@
   "buildCommand": "npm run web:build",
   "outputDirectory": "dist/web",
   "functions": {
-    "api/**/*.ts": {
-      "runtime": "@vercel/node@3"
+    "api/**/*.{js,ts}": {
+      "runtime": "nodejs20.x"
     }
   }
 }

@@ -2,7 +2,7 @@
  * Shared file operations for both XML-based (Build mode) and Tool-based (Local Agent) processing
  */
 
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import {
   gitCommit,
   gitAddAll,
@@ -101,3 +101,4 @@ export async function commitAllChanges(
     throw new Error(`Failed to commit changes: ${error}`);
   }
 }
+

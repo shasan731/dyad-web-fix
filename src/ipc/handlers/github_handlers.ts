@@ -30,7 +30,7 @@ import { apps } from "../../db/schema";
 import type { CloneRepoParams, CloneRepoReturnType } from "@/ipc/ipc_types";
 import { eq } from "drizzle-orm";
 import { GithubUser } from "../../lib/schemas";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { IS_TEST_BUILD } from "../utils/test_utils";
 import path from "node:path";
 import { withLock } from "../utils/lock_utils";
@@ -1312,3 +1312,4 @@ export async function updateAppGithubRepo({
     })
     .where(eq(schema.apps.id, appId));
 }
+

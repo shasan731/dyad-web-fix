@@ -1,5 +1,5 @@
 import { shell } from "electron";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { createLoggedHandler } from "./safe_handle";
 
 const logger = log.scope("shell_handlers");
@@ -27,3 +27,4 @@ export function registerShellHandlers() {
     logger.debug("Showed item in folder:", fullPath);
   });
 }
+

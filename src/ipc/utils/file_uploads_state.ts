@@ -1,4 +1,4 @@
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 const logger = log.scope("file_uploads_state");
 
@@ -73,3 +73,4 @@ export class FileUploadsState {
     logger.debug("Cleared all file uploads state");
   }
 }
+

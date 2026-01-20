@@ -3,7 +3,7 @@ import {
   type ApiTemplate,
   localTemplatesData,
 } from "../../shared/templates";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 const logger = log.scope("template_utils");
 
@@ -80,3 +80,4 @@ export async function getTemplateOrThrow(
   }
   return template;
 }
+

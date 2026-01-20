@@ -39,7 +39,7 @@ import fixPath from "fix-path";
 
 import killPort from "kill-port";
 import util from "util";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import os from "node:os";
 import {
   deploySupabaseFunction,
@@ -2152,3 +2152,4 @@ async function cleanUpPort(port: number) {
     await killProcessOnPort(port);
   }
 }
+

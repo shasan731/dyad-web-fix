@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { z } from "zod";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { ToolDefinition, AgentContext, escapeXmlAttr } from "./types";
 import { safeJoin } from "@/ipc/utils/path_utils";
 import { gitRemove } from "@/ipc/utils/git_utils";
@@ -77,3 +77,4 @@ export const deleteFileTool: ToolDefinition<z.infer<typeof deleteFileSchema>> =
       return `Successfully deleted ${args.path}`;
     },
   };
+

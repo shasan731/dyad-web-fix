@@ -1,4 +1,4 @@
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 export const logger = log.scope("retryWithRateLimit");
 
@@ -142,3 +142,4 @@ export async function fetchWithRetry(
     retryOptions,
   );
 }
+

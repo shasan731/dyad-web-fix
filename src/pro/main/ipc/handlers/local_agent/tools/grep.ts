@@ -11,7 +11,7 @@ import {
   MAX_FILE_SEARCH_SIZE,
   RIPGREP_EXCLUDED_GLOBS,
 } from "@/ipc/utils/ripgrep_utils";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 const logger = log.scope("grep");
 
@@ -220,3 +220,4 @@ export const grepTool: ToolDefinition<z.infer<typeof grepSchema>> = {
     return resultText;
   },
 };
+

@@ -1,5 +1,5 @@
 import { normalizePath } from "../../../shared/normalizePath";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { SqlQuery } from "../../lib/schemas";
 
 const logger = log.scope("dyad_tag_parser");
@@ -182,3 +182,4 @@ export function getDyadSearchReplaceTags(fullResponse: string): {
   }
   return tags;
 }
+

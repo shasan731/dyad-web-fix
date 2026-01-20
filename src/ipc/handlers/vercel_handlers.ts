@@ -5,7 +5,7 @@ import * as schema from "../../db/schema";
 import { db } from "../../db";
 import { apps } from "../../db/schema";
 import { eq } from "drizzle-orm";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { IS_TEST_BUILD } from "../utils/test_utils";
 import * as fs from "fs";
 import * as path from "path";
@@ -549,3 +549,4 @@ export async function updateAppVercelProject({
     })
     .where(eq(schema.apps.id, appId));
 }
+

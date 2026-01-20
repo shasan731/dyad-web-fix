@@ -1,4 +1,4 @@
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 const logger = log.scope("debug-fetch");
 
@@ -105,3 +105,4 @@ function isEventStream(response: Response): boolean {
   const contentType = response.headers.get("content-type");
   return contentType?.includes("text/event-stream") || false;
 }
+

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { z } from "zod";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { ToolDefinition, AgentContext, escapeXmlAttr } from "./types";
 import { safeJoin } from "@/ipc/utils/path_utils";
 import { deploySupabaseFunction } from "../../../../../../supabase_admin/supabase_management_client";
@@ -81,3 +81,4 @@ export const writeFileTool: ToolDefinition<z.infer<typeof writeFileSchema>> = {
     return `Successfully wrote ${args.path}`;
   },
 };
+

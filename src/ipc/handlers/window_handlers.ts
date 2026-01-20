@@ -1,6 +1,6 @@
 import { BrowserWindow, ipcMain } from "electron";
 import type { IpcMainInvokeEvent } from "electron";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { platform } from "os";
 
 const logger = log.scope("window-handlers");
@@ -52,3 +52,4 @@ export function registerWindowHandlers() {
   ipcMain.handle("window:close", handleClose);
   ipcMain.handle("get-system-platform", handleGetSystemPlatform);
 }
+

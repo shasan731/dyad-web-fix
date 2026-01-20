@@ -7,7 +7,7 @@ import { getDyadAppPath } from "@/paths/paths";
 import { EnvVar } from "../ipc_types";
 import path from "path";
 import fs from "fs";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 const logger = log.scope("app_env_var_utils");
 
@@ -171,3 +171,4 @@ export function serializeEnvFile(envVars: EnvVar[]): string {
     })
     .join("\n");
 }
+

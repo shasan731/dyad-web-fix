@@ -1,5 +1,5 @@
 import fetch from "node-fetch"; // Electron main process might need node-fetch
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { createLoggedHandler } from "./safe_handle";
 import { readSettings } from "../../main/settings"; // Assuming settings are read this way
 import { UserBudgetInfo, UserBudgetInfoSchema } from "../ipc_types";
@@ -92,3 +92,4 @@ export function registerProHandlers() {
     }
   });
 }
+

@@ -9,7 +9,7 @@ import {
 } from "@/lib/schemas";
 import { estimateTokens } from "../utils/token_utils";
 import { createLoggedHandler } from "./safe_handle";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { getDyadAppPath } from "@/paths/paths";
 import { extractCodebase } from "@/utils/codebase";
 import { validateChatContext } from "../utils/context_paths_utils";
@@ -113,3 +113,4 @@ export function registerContextPathsHandlers() {
     },
   );
 }
+

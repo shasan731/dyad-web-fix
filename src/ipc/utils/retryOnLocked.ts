@@ -1,4 +1,4 @@
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 export const logger = log.scope("retryOnLocked");
 
@@ -69,3 +69,4 @@ export async function retryOnLocked<T>(
 
   throw lastError;
 }
+

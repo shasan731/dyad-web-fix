@@ -9,7 +9,7 @@ import {
 } from "../lib/schemas";
 import { safeStorage } from "electron";
 import { v4 as uuidv4 } from "uuid";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { DEFAULT_TEMPLATE_ID } from "@/shared/templates";
 import { DEFAULT_THEME_ID } from "@/shared/themes";
 import { IS_TEST_BUILD } from "@/ipc/utils/test_utils";
@@ -287,3 +287,4 @@ export function decrypt(data: Secret): string {
   }
   return data.value;
 }
+

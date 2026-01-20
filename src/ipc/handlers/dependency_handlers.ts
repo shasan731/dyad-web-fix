@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { getDyadAppPath } from "../../paths/paths";
 import { executeAddDependency } from "../processors/executeAddDependency";
 import { createLoggedHandler } from "./safe_handle";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 const logger = log.scope("dependency_handlers");
 const handle = createLoggedHandler(logger);
@@ -61,3 +61,4 @@ export function registerDependencyHandlers() {
     },
   );
 }
+

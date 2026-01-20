@@ -5,7 +5,7 @@ import { copyDirectoryRecursive } from "../utils/file_utils";
 import { gitClone, getCurrentCommitHash } from "../utils/git_utils";
 import { readSettings } from "@/main/settings";
 import { getTemplateOrThrow } from "../utils/template_utils";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 const logger = log.scope("createFromTemplate");
 
@@ -166,3 +166,4 @@ async function copyRepoToApp(repoCachePath: string, appPath: string) {
     throw err; // Re-throw the error after logging
   }
 }
+

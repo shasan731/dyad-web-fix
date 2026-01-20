@@ -11,7 +11,7 @@ import {
   ModelMessage,
   type ToolExecutionOptions,
 } from "ai";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 import { db } from "@/db";
 import { chats, messages } from "@/db/schema";
@@ -566,3 +566,4 @@ async function getMcpTools(
 
   return mcpToolSet;
 }
+

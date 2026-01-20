@@ -4,7 +4,7 @@ import { eq, and } from "drizzle-orm";
 import { getDyadAppPath } from "../../paths/paths";
 import { neon } from "@neondatabase/serverless";
 
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { getNeonClient } from "@/neon_admin/neon_management_client";
 import { getCurrentCommitHash } from "./git_utils";
 
@@ -127,3 +127,4 @@ export async function storeDbTimestampAtCurrentVersion({
     throw error;
   }
 }
+

@@ -1,7 +1,7 @@
 import { CodebaseFile, CodebaseFileReference } from "@/utils/codebase";
 import { ModelMessage } from "@ai-sdk/provider-utils";
 import crypto from "node:crypto";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import {
   getCurrentCommitHash,
   getFileAtCommit,
@@ -262,3 +262,4 @@ export async function processChatMessagesWithVersionedFiles({
     hasExternalChanges,
   };
 }
+

@@ -1,5 +1,5 @@
 import { createLoggedHandler } from "./safe_handle";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { getAllTemplates } from "../utils/template_utils";
 import { localTemplatesData, type Template } from "../../shared/templates";
 
@@ -17,3 +17,4 @@ export function registerTemplateHandlers() {
     }
   });
 }
+

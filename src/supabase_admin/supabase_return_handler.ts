@@ -1,6 +1,6 @@
 import { readSettings, writeSettings } from "../main/settings";
 import { listSupabaseOrganizations } from "./supabase_management_client";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 const logger = log.scope("supabase_return_handler");
 

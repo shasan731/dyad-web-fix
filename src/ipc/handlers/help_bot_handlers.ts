@@ -3,7 +3,7 @@ import type { IpcMainInvokeEvent } from "electron";
 import { streamText, Tool } from "ai";
 import { readSettings } from "../../main/settings";
 
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { safeSend } from "../utils/safe_sender";
 import {
   createOpenAI,
@@ -136,3 +136,4 @@ export function registerHelpBotHandlers() {
     },
   );
 }
+

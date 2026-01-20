@@ -2,7 +2,7 @@ import * as path from "node:path";
 import { Worker } from "node:worker_threads";
 
 import { ProblemReport } from "../ipc_types";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { WorkerInput, WorkerOutput } from "../../../shared/tsc_types";
 
 import {
@@ -87,3 +87,4 @@ export async function generateProblemReport({
     worker.postMessage(input);
   });
 }
+

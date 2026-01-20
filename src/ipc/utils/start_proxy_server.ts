@@ -3,7 +3,7 @@
 import { Worker } from "worker_threads";
 import path from "path";
 import { findAvailablePort } from "./port_utils";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 
 const logger = log.scope("start_proxy_server");
 
@@ -49,3 +49,4 @@ export async function startProxy(
 
   return worker; // let the caller keep a handle if desired
 }
+

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import {
   ToolDefinition,
   AgentContext,
@@ -136,3 +136,4 @@ export const codeSearchTool: ToolDefinition<z.infer<typeof codeSearchSchema>> =
       return `Found ${relevantFiles.length} relevant file(s):\n${resultText}`;
     },
   };
+

@@ -20,7 +20,7 @@ import {
   getDyadCommandTags,
   getDyadSearchReplaceTags,
 } from "../utils/dyad_tag_parser";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { isServerFunction } from "../../supabase_admin/supabase_utils";
 import {
   estimateMessagesTokens,
@@ -426,3 +426,4 @@ export function registerProposalHandlers() {
   handle("approve-proposal", approveProposalHandler);
   handle("reject-proposal", rejectProposalHandler);
 }
+

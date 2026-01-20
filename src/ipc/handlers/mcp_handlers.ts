@@ -1,5 +1,5 @@
 import { IpcMainInvokeEvent } from "electron";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { db } from "../../db";
 import { mcpServers, mcpToolConsents } from "../../db/schema";
 import { eq, and } from "drizzle-orm";
@@ -161,3 +161,4 @@ export function registerMcpHandlers() {
     },
   );
 }
+

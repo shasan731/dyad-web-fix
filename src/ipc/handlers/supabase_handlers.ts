@@ -1,4 +1,4 @@
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { db } from "../../db";
 import { eq } from "drizzle-orm";
 import { apps } from "../../db/schema";
@@ -309,3 +309,4 @@ export function registerSupabaseHandlers() {
     },
   );
 }
+

@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "fs/promises";
 import { app } from "electron";
 import * as crypto from "crypto";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import Database from "better-sqlite3";
 
 const logger = log.scope("backup_manager");
@@ -388,3 +388,4 @@ export class BackupManager {
     logger.debug(`Current version saved: ${version}`);
   }
 }
+

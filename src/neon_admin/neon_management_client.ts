@@ -1,7 +1,7 @@
 import { withLock } from "../ipc/utils/lock_utils";
 import { readSettings, writeSettings } from "../main/settings";
 import { Api, createApiClient } from "@neondatabase/api-client";
-import log from "electron-log";
+import log from "@/utils/simple_logger";
 import { IS_TEST_BUILD } from "../ipc/utils/test_utils";
 
 const logger = log.scope("neon_management_client");
