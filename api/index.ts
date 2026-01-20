@@ -1,21 +1,10 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 
-// This is a catch-all API handler for Vercel
-// It proxies requests to the main server
+// This handler is for the root /api/ endpoint
+// Specific routes like /api/ipc/invoke are handled by their respective files in the api/ directory
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  try {
-    // For Vercel deployment, we need to handle API requests differently
-    // This handler will be called for all API routes under /api/*
-    
-    res.status(200).json({
-      message: 'Dyad API Server',
-      status: 'running',
-      mode: 'vercel',
-    });
-  } catch (error) {
-    res.status(500).json({
-      error: 'Internal Server Error',
-      message: error instanceof Error ? error.message : 'Unknown error',
-    });
-  }
+  res.status(404).json({
+    error: 'Not Found',
+    message: 'API endpoint not found. Use /api/ipc/invoke for IPC requests.',
+  });
 }
