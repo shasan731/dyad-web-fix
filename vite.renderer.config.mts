@@ -11,4 +11,15 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      onwarn(warning, warn) {
+        // Skip certain warnings during build
+        if (warning.code === 'UNRESOLVED_ENTRY' || warning.code === 'CIRCULAR_DEPENDENCY') {
+          return;
+        }
+        warn(warning);
+      },
+    },
+  },
 });
